@@ -1,0 +1,14 @@
+Class System Main{
+    a : 1
+    b : a + 1
+    Func ele{
+        self.c : 1
+        self.y : 3^4
+        Func fkfkfkf{
+            pass
+        }
+    }
+}
+
+Class SYstem fff{
+}
