@@ -44,7 +44,7 @@ class parser():
                 self.parse_result.append(value.strip(";")) #used strip to put ';' out of the names
                 self.parse_result.append(self.TT_END)
                 word = ""
-            elif letter == "{": #checks when a Class or a Function ends and return the certain token
+            elif letter == "}": #checks when a Class or a Function ends and return the certain token
                 self.parse_result.append(self.TT_END)
                 word = "" #reset the word just in case
             elif letter == " ": #checks the word
