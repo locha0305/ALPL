@@ -23,8 +23,9 @@ class parser():
         self.TT_SETATTR = "SETATTR"
         self.TT_DEFINE = "DEFINE"
         self.TT_END = "END"
-
+        self.TT_CALL = "CALL"
     def parse(self): #this parses the code
+        print(self.code)
         cursor = 0
         word = ""
         while cursor < len(self.code):
@@ -38,10 +39,14 @@ class parser():
                 jump = 0
                 value = ""
                 while self.code[jump + cursor] != ";":
-                    jump += 1
-                    value += self.code[jump + cursor]
+                    if self.code[jump + cursor] == "}":
+                        jump -= 1 #therefore to check for '}'
+                        break
+                    else:
+                        jump += 1
+                        value += self.code[jump + cursor]
                 cursor += jump
-                self.parse_result.append(value.strip(";")) #used strip to put ';' out of the names
+                self.parse_result.append(value.strip(";").strip("}")) #used strip to put ';' out of the names/also strip '}' just in case to define attributes in just one line
                 self.parse_result.append(self.TT_END)
                 word = ""
             elif letter == "}": #checks when a Class or a Function ends and return the certain token
@@ -78,7 +83,22 @@ class parser():
                         self.parse_result.append(attributes.strip("{")) #used strip to put '{' out of the names
                     self.parse_result.append(self.TT_END)
                     word = ""
-                else: #basically has no meaning
+                elif word == "Call": #when the word is Call
+                    jump = 0
+                    definition = ""
+                    while self.code[jump + cursor] != "{":
+                        jump += 1
+                        definition += self.code[jump + cursor]
+                    cursor += jump
+                    definition = definition.split(" ")
+                    #put tokens in parse result
+                    self.parse_result.append(self.TT_CALL) 
+                    self.parse_result.append(self.TT_DEFINE)
+                    for attributes in definition:
+                        self.parse_result.append(attributes.strip("{")) #used strip to put '{' out of the names
+                    self.parse_result.append(self.TT_END)
+                    word = ""
+                else: #basically do nothing
                     pass
             
             else:
@@ -93,6 +113,10 @@ with open('test.txt', 'r') as file:
 
 Parser = parser(filer)
 print(Parser.parse())
+
+            
+
+
 
             
 
