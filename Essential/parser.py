@@ -1,6 +1,6 @@
 #developed by locha
 #parser for ALPL
-#2021-1-14 UPDATE
+
 
 #imports
 import sys
@@ -14,7 +14,6 @@ class parser():
     def __init__(self, code): #input code
         self.code = code
         self.code = self.code.split("\n")
-        self.code = [line + ";" for line in self.code]
         self.code = ''.join(self.code)
         self.parse_result = []
         #tokens to define
@@ -25,7 +24,6 @@ class parser():
         self.TT_END = "END"
         self.TT_CALL = "CALL"
     def parse(self): #this parses the code
-        print(self.code)
         cursor = 0
         word = ""
         while cursor < len(self.code):
@@ -45,8 +43,16 @@ class parser():
                     else:
                         jump += 1
                         value += self.code[jump + cursor]
+                
+
+                try:
+                    if self.code[cursor + jump + 1] == "}": #just therefore to handle Functions
+                        self.parse_result.append(value.strip(";") + "}") #used strip to put ';' out of the names/also strip '}' just in case to define attributes in just one line
+                    else:
+                        self.parse_result.append(value.strip(";").strip("}"))
+                except IndexError:
+                    self.parse_result.append(value.strip(";").strip("}"))
                 cursor += jump
-                self.parse_result.append(value.strip(";").strip("}")) #used strip to put ';' out of the names/also strip '}' just in case to define attributes in just one line
                 self.parse_result.append(self.TT_END)
                 word = ""
             elif letter == "}": #checks when a Class or a Function ends and return the certain token
@@ -105,14 +111,21 @@ class parser():
                 word += letter
             cursor += 1
         return self.parse_result
+    
+    
+if __name__ == "__main__":
+    with open('Essential/test.txt', 'r') as file:
+        filer = file.readlines()
+        filer = ''.join(filer)
 
-with open('Essential/test.txt', 'r') as file:
-    filer = file.readlines()
-    filer = ''.join(filer)
+
+    Parser = parser(filer)
+    print(Parser.parse())
+
+            
 
 
-Parser = parser(filer)
-print(Parser.parse())
+
 
             
 
