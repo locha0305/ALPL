@@ -5,8 +5,7 @@
 #imports
 import sys
 import os
-import random
-import math
+
 
 #this is a parser class
 #parse ALPL file to normal list
@@ -14,6 +13,7 @@ class parser():
     def __init__(self, code): #input code
         self.code = code
         self.code = self.code.split("\n")
+        self.code = [line + ";" for line in self.code]
         self.code = ''.join(self.code)
         self.parse_result = []
         #tokens to define
@@ -45,13 +45,7 @@ class parser():
                         value += self.code[jump + cursor]
                 
 
-                try:
-                    if self.code[cursor + jump + 1] == "}": #just therefore to handle Functions
-                        self.parse_result.append(value.strip(";") + "}") #used strip to put ';' out of the names/also strip '}' just in case to define attributes in just one line
-                    else:
-                        self.parse_result.append(value.strip(";").strip("}"))
-                except IndexError:
-                    self.parse_result.append(value.strip(";").strip("}"))
+                self.parse_result.append(value.strip(";").strip("}"))
                 cursor += jump
                 self.parse_result.append(self.TT_END)
                 word = ""
@@ -121,6 +115,11 @@ if __name__ == "__main__":
 
     Parser = parser(filer)
     print(Parser.parse())
+
+            
+
+
+
 
             
 
