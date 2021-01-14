@@ -1,6 +1,6 @@
 #developed by locha
 #parser for ALPL
-
+#2021-1-14 UPDATE
 
 #imports
 import sys
@@ -106,7 +106,7 @@ class parser():
             cursor += 1
         return self.parse_result
 
-with open('test.txt', 'r') as file:
+with open('Essential/test.txt', 'r') as file:
     filer = file.readlines()
     filer = ''.join(filer)
 
