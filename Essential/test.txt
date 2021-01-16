@@ -1,14 +1,11 @@
-Class System Main{
-    a : 1
-    b : a + 1
-    Func ele{
-        self.c : 1
-        self.y : 3^4
-        Func fkfkfkf{
-            pass
-        }
+Class class_ex1{
+    Func func_ex1{
     }
+    Func func_ex2{
+    }
+    attr_ex1 : 1 + 3
+    attr_ex2 : attr_ex1 * 5
+    
 }
-
-Class SYstem fff{
+Func func_ex3{
 }
