@@ -8,11 +8,17 @@ class runtime():
         self.parser = Parser.parser(self.code) #get parse result
         self.code = self.parser.parse()
         print(self.code)
-        #Class
+        #main class
         self.main = Classes.Class()
         #Class object
         self.main.add_attr("CLASS", Classes.Class)
         self.main.attributes["CLASS"].__init__(self.main.attributes["CLASS"]) #initiallize the Class class
+        #Function object
+        self.main.add_attr("FUNCTION", Classes.Function)
+        self.main.attributes["FUNCTION"].__init__(self.main.attributes["FUNCTION"]) #initiallize the Function class
+    
+        self.mother = "MAIN"
+        self.saved_mother = "CLASS" #save self.mother to go up
     def Eval(self, statement):
         statement += " " #just in case to check the last value
         self.operator = ['+', '-', '*', '^', '%', ' ']
@@ -58,24 +64,49 @@ class runtime():
                     self.main.attributes[self.daughter].attributes[attr] = self.main.attributes[self.mother].attributes[attr] #get the characteristics of it's mother class
                 
                 self.mother = self.daughter
+
             elif self.current_TT == "SETATTR": #make attributes
                 cursor += 1
                 attr_name = self.code[cursor]
                 cursor += 1
                 attr_val = self.Eval(self.code[cursor])
-                print(self.main.attributes[self.mother].attributes)
                 self.main.attributes[self.mother].attributes[attr_name] = attr_val
+
+            elif self.current_TT == "FUNC":
+                self.saved_mother = self.mother
+                jump = 2
+                definition = []
+                while self.code[cursor + jump] != "END_DEFINE": #check for definitions
+                    definition.append(self.code[cursor + jump])
+                    jump += 1
+                cursor += jump
+                self.daughter = definition[-1] #the last thing is the name of the created Function
+                self.mother = definition[0]
+                if len(definition) == 2: #when a top class exists
+                    pass
+                else:
+                    self.mother = "MAIN"
+
+                if self.mother == "MAIN":
+                    self.main.add_attr(self.daughter, self.main.attributes["FUNCTION"]())
+                else:
+                    self.main.attributes[self.mother].add_attr(self.daughter, self.main.attributes["FUNCTION"]())
+                self.mother = self.daughter
             elif self.current_TT == "END": #when end
-                self.mother = "CLASS"
+                self.mother = self.saved_mother
             cursor += 1
-            print(self.mother)
             
-        
-Rt = runtime("Class b{p : 1\nq : 6 * 3}\nClass b a{x : 12.1 * 2\ny : 12 * 2\nz: x+3}\nClass a c{value : 11}")
+            
+with open('Essential/test.txt', 'r') as file:
+        filer = file.readlines()
+        filer = ''.join(filer)
+Rt = runtime(filer)
 Rt.execute()
 print(Rt.main.attributes)
-print(Rt.main.attributes["a"].attributes, Rt.main.attributes["b"].attributes, Rt.main.attributes["c"].attributes)  
+print(Rt.main.attributes["tiger"].attributes)
+print(Rt.main.attributes["yeu"].attributes)
 #print(Rt.Eval('1 + 3 * 2'))
+
 
 
 
