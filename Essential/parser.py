@@ -5,7 +5,8 @@
 #imports
 import sys
 import os
-
+import random
+import math
 
 #this is a parser class
 #parse ALPL file to normal list
@@ -21,6 +22,8 @@ class parser():
         self.TT_FUNC = "FUNC"
         self.TT_SETATTR = "SETATTR"
         self.TT_DEFINE = "DEFINE"
+        self.TT_END_DEFINE = "END_DEFINE"
+        self.TT_END_SETATTR = "END_SETATTR"
         self.TT_END = "END"
         self.TT_CALL = "CALL"
     def parse(self): #this parses the code
@@ -47,7 +50,7 @@ class parser():
 
                 self.parse_result.append(value.strip(";").strip("}"))
                 cursor += jump
-                self.parse_result.append(self.TT_END)
+                self.parse_result.append(self.TT_END_SETATTR)
                 word = ""
             elif letter == "}": #checks when a Class or a Function ends and return the certain token
                 self.parse_result.append(self.TT_END)
@@ -66,7 +69,7 @@ class parser():
                     self.parse_result.append(self.TT_DEFINE)
                     for attributes in definition:
                         self.parse_result.append(attributes.strip("{")) #used strip to put '{' out of the names
-                    self.parse_result.append(self.TT_END)
+                    self.parse_result.append(self.TT_END_DEFINE)
                     word = ""
                 elif word == "Func": #when the word is Func
                     jump = 0
@@ -81,7 +84,7 @@ class parser():
                     self.parse_result.append(self.TT_DEFINE)
                     for attributes in definition:
                         self.parse_result.append(attributes.strip("{")) #used strip to put '{' out of the names
-                    self.parse_result.append(self.TT_END)
+                    self.parse_result.append(self.TT_END_DEFINE)
                     word = ""
                 elif word == "Call": #when the word is Call
                     jump = 0
@@ -96,7 +99,7 @@ class parser():
                     self.parse_result.append(self.TT_DEFINE)
                     for attributes in definition:
                         self.parse_result.append(attributes.strip("{")) #used strip to put '{' out of the names
-                    self.parse_result.append(self.TT_END)
+                    self.parse_result.append(self.TT_END_DEFINE)
                     word = ""
                 else: #basically do nothing
                     pass
@@ -115,6 +118,11 @@ if __name__ == "__main__":
 
     Parser = parser(filer)
     print(Parser.parse())
+
+            
+
+
+
 
             
 
