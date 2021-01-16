@@ -7,6 +7,7 @@ class runtime():
         self.code = code
         self.parser = Parser.parser(self.code) #get parse result
         self.code = self.parser.parse()
+        print(self.code)
         #Class
         self.main = Classes.Class()
         #Class object
@@ -53,24 +54,29 @@ class runtime():
                 else:
                     self.mother = "CLASS"
                 self.main.add_attr(self.daughter, self.main.attributes["CLASS"]())
-                self.main.attributes[self.daughter].attributes = self.main.attributes[self.mother].attributes #get the characteristics of it's mother class
+                for attr in self.main.attributes[self.mother].attributes:
+                    self.main.attributes[self.daughter].attributes[attr] = self.main.attributes[self.mother].attributes[attr] #get the characteristics of it's mother class
+                
                 self.mother = self.daughter
-                self.main.attributes["b"].attributes = {"Y" : 1, "X" : 12 ** 3}
-                print(self.main.attributes, self.mother)
             elif self.current_TT == "SETATTR": #make attributes
                 cursor += 1
                 attr_name = self.code[cursor]
                 cursor += 1
                 attr_val = self.Eval(self.code[cursor])
-                self.main.attributes[self.mother].add_attr(attr_name, attr_val)
-                
+                print(self.main.attributes[self.mother].attributes)
+                self.main.attributes[self.mother].attributes[attr_name] = attr_val
+            elif self.current_TT == "END": #when end
+                self.mother = "CLASS"
             cursor += 1
-
+            print(self.mother)
+            
         
-Rt = runtime("Class b{c : 2\nd : 2 + 4 * 2}\nClass a{x : 12.1 * 2\ny : 12 * 2\nz: x+3}")
+Rt = runtime("Class b{p : 1\nq : 6 * 3}\nClass b a{x : 12.1 * 2\ny : 12 * 2\nz: x+3}\nClass a c{value : 11}")
 Rt.execute()
-print(Rt.main.attributes["b"].attributes, Rt.main.attributes["a"].attributes)
+print(Rt.main.attributes)
+print(Rt.main.attributes["a"].attributes, Rt.main.attributes["b"].attributes, Rt.main.attributes["c"].attributes)  
 #print(Rt.Eval('1 + 3 * 2'))
+
 
 
 
