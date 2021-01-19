@@ -17,7 +17,7 @@ class runtime():
         self.main.add_attr("FUNCTION", Classes.Function)
         self.main.attributes["FUNCTION"].__init__(self.main.attributes["FUNCTION"]) #initiallize the Function class
     
-        self.mother = "MAIN"
+        self.mother = "CLASS"
         self.saved_mother = "CLASS" #save self.mother to go up
     def Eval(self, statement):
         statement += " " #just in case to check the last value
@@ -54,15 +54,22 @@ class runtime():
                     jump += 1
                 cursor += jump
                 self.daughter = definition[-1] #the last thing is the name of the created Class
-                self.mother = definition[0]
-                if len(definition) == 2: #when a top class exists
-                    pass
+                if len(definition) >= 2: #when a top class exists
+                    mother = self.main
+                    for attr in range(len(definition) - 1):
+                        mother = mother.attributes[definition[attr]] #get mother class
+                    self.main.add_attr(self.daughter, self.main.attributes["CLASS"]())
+                    for attr in mother.attributes:
+                        self.main.attributes[self.daughter].attributes[attr] = mother.attributes[attr] #get the characteristics of it's mother class
                 else:
                     self.mother = "CLASS"
-                self.main.add_attr(self.daughter, self.main.attributes["CLASS"]())
-                for attr in self.main.attributes[self.mother].attributes:
-                    self.main.attributes[self.daughter].attributes[attr] = self.main.attributes[self.mother].attributes[attr] #get the characteristics of it's mother class
+                    self.main.add_attr(self.daughter, self.main.attributes["CLASS"]())
                 
+                
+                
+                
+               
+
                 self.mother = self.daughter
 
             elif self.current_TT == "SETATTR": #make attributes
@@ -103,11 +110,7 @@ with open('Essential/test.txt', 'r') as file:
 Rt = runtime(filer)
 Rt.execute()
 print(Rt.main.attributes)
-print(Rt.main.attributes["tiger"].attributes)
-print(Rt.main.attributes["yeu"].attributes)
+print(Rt.main.attributes["a"].attributes)
+print(Rt.main.attributes["b"].attributes)
+
 #print(Rt.Eval('1 + 3 * 2'))
-
-
-
-
-
