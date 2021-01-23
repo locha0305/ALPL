@@ -5,8 +5,12 @@ Class class_ex1{
     }
     Func class_ex1 func_ex2{
     }
-    attr_ex1 : 12
+    attr_ex1 : 12;
     attr_ex2 : Call class_ex1 func_ex1{input : None}
+    
+    Call class_ex1 func_ex1{
+        input : None
+    }
     
 }
 
